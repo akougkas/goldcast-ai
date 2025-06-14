@@ -1,0 +1,142 @@
+[project]
+name = "gold-forecasting"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "akougkas", email = "a.kougkas@gmail.com" }
+]
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "pydantic-settings",
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "statsmodels",
+    "prophet",
+    "xgboost[gpu]",  # XGBoost with GPU support
+    "optuna",
+    "structlog",
+    "python-dotenv",
+    "httpx",
+    "matplotlib", # optional, for notebooks
+    "seaborn",    # optional, for notebooks
+    "tensorflow", # For LSTM models
+    # PyTorch will be installed separately with CUDA support 
+    "cuml-cu12>=24.10",  # RAPIDS cuML for GPU ML
+    "cudf-cu12>=24.10",  # RAPIDS cuDF for GPU DataFrames  
+    "cupy-cuda12x>=13.0",  # CuPy for GPU array operations
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-asyncio",
+    "mypy",
+    "ruff",
+    "pre-commit",
+    "black",
+    "isort",
+    "jupyterlab",
+    "ipykernel",
+]
+test = [
+    "pytest",
+    "pytest-cov",
+    "pytest-asyncio",
+    "httpx",
+]
+
+[project.scripts]
+gold-forecasting = "gold_forecasting:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "UP", "PL", "PTH"]
+ignore = [
+    "E501", # Line too long, handled by black
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["gold_forecasting"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+known_first_party = "gold_forecasting"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true 
+disallow_untyped_defs = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "prophet.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "statsmodels.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "optuna.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "xgboost.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "seaborn.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "matplotlib.*"
+ignore_missing_imports = true
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "tests"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = """
+    --cov=src/gold_forecasting 
+    --cov-report=term-missing 
+    --cov-report=xml 
+    --cov-report=html:cov_html
+    --junitxml=test-results/junit.xml
+"""
+
+[dependency-groups]
+dev = [
+    "mypy>=1.16.0",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.0.0",
+    "pytest-cov>=6.2.1",
+    "ruff>=0.11.13",
+]
