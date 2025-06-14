@@ -119,4 +119,37 @@ Every model/window combination must beat its baseline MAE score. Use TimeSeriesS
 - **Unified** model configurations with automatic GPU/CPU model mapping
 - **Eliminated** redundant code between separate training scripts
 - **Added** comprehensive test coverage (12 tests, 70% coverage)
+- **Validated** with 91.7% baseline beating rate on test data
 - **Usage**: `uv run python src/gold_forecasting/modeling/unified_train.py [--use-gpu]`
+
+## Next Priority Tasks
+
+### 🔄 Data Pipeline Integration
+- **TODO**: Implement `data_processing/loader.py` for robust CSV loading and validation
+- **TODO**: Create data quality checks and validation pipeline
+- **TODO**: Add support for different data sources and formats
+- **Files to create**: `src/gold_forecasting/data_processing/loader.py`, tests
+
+### 🔄 Model Persistence & Serving
+- **TODO**: Add model saving/loading functionality to unified training script
+- **TODO**: Create model registry for tracking trained models and performance
+- **TODO**: Implement model comparison and selection utilities
+- **Enhancement**: Extend unified_train.py with `--save-models` flag
+
+### 🔄 API Development
+- **TODO**: Implement FastAPI endpoints in `api/endpoints/` 
+- **TODO**: Add model serving endpoints (`/predict`, `/models`, `/compare`)
+- **TODO**: Create WebSocket support for real-time training progress
+- **Files to create**: `src/gold_forecasting/api/main.py`, endpoint modules
+
+### 🔄 Advanced Model Implementation
+- **TODO**: Complete LSTM model implementation (`modeling/lstm_model.py`)
+- **TODO**: Enhance XGBoost model with GPU support (`modeling/xgboost_model.py`) 
+- **TODO**: Add ARIMA/Prophet time series models (`modeling/arima_model.py`)
+- **Integration**: Connect these models to unified training pipeline
+
+### 🔄 Performance Optimization
+- **TODO**: Add hyperparameter optimization with Optuna
+- **TODO**: Implement parallel model training with joblib
+- **TODO**: Add model ensemble and stacking capabilities
+- **Enhancement**: Beat all baseline MAE scores consistently
